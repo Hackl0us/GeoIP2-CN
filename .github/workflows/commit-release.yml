@@ -1,4 +1,4 @@
-name: Go
+name: commit-release
 
 on:
   push:
