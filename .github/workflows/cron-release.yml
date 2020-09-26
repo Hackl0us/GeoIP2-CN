@@ -56,7 +56,7 @@ jobs:
         run: |
           mkdir publish
           cp -af dist/version publish/version
-          cp -af dist/china_ip_list.mmdb publish/Country.mmdb
+          cp -af dist/Country.mmdb publish/Country.mmdb
           cd publish
           git init
           git config --local user.name "${{ github.actor }}"
