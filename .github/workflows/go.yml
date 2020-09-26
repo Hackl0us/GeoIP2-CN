@@ -49,7 +49,8 @@ jobs:
       shell: bash
 
     - name: Generate version file
-        run: |
+      run: |
+          cd dist
           echo $TAG_NAME > version
 
     - name: Release and upload
@@ -60,7 +61,7 @@ jobs:
         draft: false
         prerelease: false
         files: |
-          version
-          Country.mmdb
+          ./dist/version
+          ./dist/Country.mmdb
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
