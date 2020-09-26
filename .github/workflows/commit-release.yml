@@ -1,10 +1,11 @@
 name: commit-release
 
 on:
-#  push:
+  push:
 #    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+#    disabled push commit
+  branches-ignore:
+    - '**'
 
 jobs:
   build:
