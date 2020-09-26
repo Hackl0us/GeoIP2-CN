@@ -7,7 +7,7 @@ import (
 	"net"
 )
 
-const DATA_FILE = "../Country.mmdb"
+const DATA_FILE = "Country.mmdb"
 
 func main() {
 	db, err := geoip2.Open(DATA_FILE)
