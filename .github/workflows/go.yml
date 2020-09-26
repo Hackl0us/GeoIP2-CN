@@ -50,7 +50,6 @@ jobs:
 
     - name: Generate version file
         run: |
-          cd dist
           echo $TAG_NAME > version
 
     - name: Release and upload
@@ -61,7 +60,7 @@ jobs:
         draft: false
         prerelease: false
         files: |
-          ./dist/version
-          ./dist/Country.mmdb
+          version
+          Country.mmdb
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
