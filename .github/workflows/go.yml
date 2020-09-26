@@ -7,7 +7,6 @@ on:
     branches: [ master ]
 
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -29,7 +28,8 @@ jobs:
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
+    - name: Create dist folder
+      run: mkdir -p dist
 
-
-    - name: Version
-      run: go version
+    - name: buildAction
+      run: ./build.sh
