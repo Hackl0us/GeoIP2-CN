@@ -50,17 +50,17 @@ jobs:
           cd dist
           echo $TAG_NAME > version
 
-  - name: Push to release branch
-      run: |
-        mkdir publish
-        cp -af dist/version publish/version
-        cp -af dist/china_ip_list.mmdb publish/Country.mmdb
-        cd publish
-        git init
-        git config --local user.name "${{ github.actor }}"
-        git config --local user.email "${{ github.actor }}@users.noreply.github.com"
-        git checkout -b release
-        git add .
-        git commit -m "${{ env.RELEASE_NAME }}"
-        git remote add origin "https://${{ github.actor }}:${{ secrets.PERSONAL_TOKEN }}@github.com/${{ github.repository }}"
-        git push -f -u origin release
+      - name: Push to release branch
+        run: |
+          mkdir publish
+          cp -af dist/version publish/version
+          cp -af dist/china_ip_list.mmdb publish/Country.mmdb
+          cd publish
+          git init
+          git config --local user.name "${{ github.actor }}"
+          git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+          git checkout -b release
+          git add .
+          git commit -m "${{ env.RELEASE_NAME }}"
+          git remote add origin "https://${{ github.actor }}:${{ secrets.PERSONAL_TOKEN }}@github.com/${{ github.repository }}"
+          git push -f -u origin release
