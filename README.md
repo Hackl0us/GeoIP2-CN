@@ -17,5 +17,8 @@ Country.mmdb只包含中国的ip列表，并没有其他国家数据
 | ------ | ------ | 
 |Country.mmdb | [链接](https://raw.githubusercontent.com/JMVoid/ipip2mmdb/release/Country.mmdb) |
 
-### 扩展
+### Credit
+[@alecthw](https://github.com/alecthw/mmdb_china_ip_list)
+
+### 扩展说明
 verify代码用来验证在2020.9月发现某些IP会被MaxMind错误归类为中国IP
