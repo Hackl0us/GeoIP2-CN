@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Generate GeoIP2 database
     runs-on: ubuntu-latest
     steps:
 
@@ -34,7 +34,7 @@ jobs:
     - name: Create dist folder
       run: mkdir -p dist
 
-    - name: buildAction
+    - name: Compile GeoIP conversion bin (Golang)
       run: ./build.sh
 
     - name: Obtain CN IP lists
@@ -44,7 +44,7 @@ jobs:
 
     - name: Merge and IP lists and remove duplicates
       run: |
-        awk 'FNR==1{print ""}{print}' *.txt > dist/merge.txt
+        awk 'FNR==1{print ""}{print}' dist/*.txt > dist/merge.txt
         awk '!seen[$0]++' dist/merge.txt > dist/geoip-cn.txt
 
     - name: Generate GeoIP2 database
