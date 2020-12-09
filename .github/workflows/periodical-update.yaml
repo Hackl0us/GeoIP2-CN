@@ -1,0 +1,84 @@
+name: Update China IP list and generate GeoIP2 database
+
+on:
+  push:
+    branches: [ master ]
+  
+  workflow_dispatch:
+
+  schedule: 
+    - cron:  '0 2 */3 * *'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.14
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Get dependencies
+      run: |
+        go get -v -t -d ./...
+        if [ -f Gopkg.toml ]; then
+            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+            dep ensure
+        fi
+    - name: Create dist folder
+      run: mkdir -p dist
+
+    - name: buildAction
+      run: ./build.sh
+
+    - name: Obtain CN IP lists
+      run: |
+        curl -LR -o dist/ipip_net.txt "https://raw.githubusercontent.com/17mon/china_ip_list/master/china_ip_list.txt"
+        curl -LR -o dist/chunzhen.txt "https://raw.githubusercontent.com/metowolf/iplist/master/data/country/CN.txt"
+
+    - name: Merge and IP lists and remove duplicates
+      run: |
+        awk 'FNR==1{print ""}{print}' *.txt > dist/merge.txt
+        awk '!seen[$0]++' dist/merge.txt > dist/geoip-cn.txt
+
+    - name: Generate GeoIP2 database
+      run: |
+        CURRENT_DIR=$(pwd)
+        cd dist
+        ./ipip2mmdb -s ./geoip-cn.txt -d Country.mmdb
+        cd $CURRENT_DIR
+
+    - name: Save artifacts
+      run: |
+        if [ ! -d artifacts ]; then
+          mkdir -p artifacts
+        fi
+
+        unalias cp
+        cp -rf dist/geoip-cn.txt artifacts/
+        cp -rf dist/Country.mmdb artifacts/
+    
+    - name: Commit Changes
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then 
+              exit 0
+          else 
+              git add artifacts
+              git config --local user.email "10215166+Hackl0us@users.noreply.github.com"
+              git config --local user.name "github-action[bot]"
+              git commit -m "Update GeoIP at $(date)" -a
+          fi
+            
+    - name: GitHub Push
+        uses: ad-m/github-push-action@v0.5.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Purge CDN Cache
+      run: curl ${{ secrets.CDN_URL }}
