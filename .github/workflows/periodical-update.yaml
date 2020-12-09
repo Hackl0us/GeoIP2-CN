@@ -65,20 +65,20 @@ jobs:
         cp -rf dist/Country.mmdb artifacts/
     
     - name: Commit Changes
-        run: |
-          if [ -z "$(git status --porcelain)" ]; then 
-              exit 0
-          else 
-              git add artifacts
-              git config --local user.email "10215166+Hackl0us@users.noreply.github.com"
-              git config --local user.name "github-action[bot]"
-              git commit -m "Update GeoIP at $(date)" -a
-          fi
+      run: |
+        if [ -z "$(git status --porcelain)" ]; then 
+          exit 0
+        else 
+          git add artifacts
+          git config --local user.email "10215166+Hackl0us@users.noreply.github.com"
+          git config --local user.name "github-action[bot]"
+          git commit -m "Update GeoIP at $(date)" -a
+        fi
             
     - name: GitHub Push
-        uses: ad-m/github-push-action@v0.5.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      uses: ad-m/github-push-action@v0.5.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Purge CDN Cache
       run: curl ${{ secrets.CDN_URL }}
