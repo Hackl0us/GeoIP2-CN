@@ -60,7 +60,6 @@ jobs:
           mkdir -p artifacts
         fi
 
-        unalias cp
         cp -rf dist/geoip-cn.txt artifacts/
         cp -rf dist/Country.mmdb artifacts/
     
