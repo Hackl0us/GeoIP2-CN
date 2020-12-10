@@ -1,7 +1,9 @@
+![](https://i.loli.net/2020/12/10/BW8HVtKTbISrPYv.png)
+
 # GeoIP2 · CN
 🇨🇳 最小巧、最准确、最实用的 中国大陆 IP 段 + GeoIP2 数据库 🇨🇳
 
-## 🔖 设计原因
+## 🔖 设计初衷
 目前市面上绝大多数的代理工具都依赖于 GeoIP2 数据库判断地址所属地。它们的规则结尾部分一般都会有一条类似 `GEOIP, CN`，用来查询目的 IP 地址是否属于中国大陆，从而判断是否直连。
 
 这些代理工具通常使用的 GeoIP2 数据库是来自于 MaxMind 的 [GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/) 免费数据库。这个数据库目前存在一下几个问题：
@@ -54,10 +56,12 @@ Clash 及其衍生工具（如 Clash X, Clash for Windows, Clash for Android, Op
 直接在 Safari 中打开 `Country.mmdb` 下载链接，Safari 下载完毕后页面下方会提示 “在...中打开”，点击完成导入。
 
 
-## 🏅 版权说明
+## 🏅 版权声明
 
 本项目 Fork 自 [JMVoid/ipip2mmdb](https://github.com/JMVoid/ipip2mmdb) 项目，并由 [Hackl0us](https://github.com/Hackl0us) 加以调整和修改。
 
 项目中所使用的 IP 地址信息来自于 [17mon/china_ip_list](https://github.com/17mon/china_ip_list)（基于 ipip.net）和 [metowolf/iplist](https://github.com/metowolf/iplist) （基于 纯真 IP）。
 
-GeoIP® 商标版权归 MaxMind 公司所有。
+GeoIP® 商标版权归 [MaxMind](https://www.maxmind.com/) 公司所有。
+
+项目的 Soial Preview 图片来源于 [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Chinese_Dragon.svg)，其版权信息为 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)。
