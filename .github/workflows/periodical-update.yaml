@@ -45,39 +45,42 @@ jobs:
     - name: Merge and IP lists and remove duplicates
       run: |
         awk 'FNR==1{print ""}{print}' dist/*.txt > dist/merge.txt
-        awk '!seen[$0]++' dist/merge.txt > dist/geoip-cn.txt
+        awk '!seen[$0]++' dist/merge.txt > dist/CN-ip-cidr.txt
 
     - name: Generate GeoIP2 database
       run: |
         CURRENT_DIR=$(pwd)
         cd dist
-        ./ipip2mmdb -s ./geoip-cn.txt -d Country.mmdb
+        ./ipip2mmdb -s ./CN-ip-cidr.txt -d Country.mmdb
         cd $CURRENT_DIR
 
-    - name: Save artifacts
+    - name: Push artifacts to release branch
       run: |
-        if [ ! -d artifacts ]; then
-          mkdir -p artifacts
-        fi
+        git config --local user.email "10215166+Hackl0us@users.noreply.github.com"
+        git config --local user.name "github-action[bot]"
 
-        cp -rf dist/geoip-cn.txt artifacts/
-        cp -rf dist/Country.mmdb artifacts/
-    
-    - name: Commit Changes
-      run: |
-        if [ -z "$(git status --porcelain)" ]; then 
-          exit 0
-        else 
-          git add artifacts
-          git config --local user.email "10215166+Hackl0us@users.noreply.github.com"
-          git config --local user.name "github-action[bot]"
-          git commit -m "Update GeoIP at $(date)" -a
-        fi
+        git fetch
+        git checkout release
+
+        git checkout --orphan release-orphan
+        git rm -rf .
+
+        cp -rf dist/CN-ip-cidr.txt ./
+        cp -rf dist/Country.mmdb ./
+
+        git add Country.mmdb
+        git add CN-ip-cidr.txt
+        git commit -am "Updated at $(date)"
+
+        git branch -D release
+        git branch -m release
             
     - name: GitHub Push
-      uses: ad-m/github-push-action@v0.5.0
+      uses: ad-m/github-push-action@v0.6.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: release
+        force: true
 
     - name: Purge CDN Cache
       run: curl ${{ secrets.CDN_URL }}
