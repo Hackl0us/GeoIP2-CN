@@ -16,7 +16,7 @@
 
 庞大的数据量无可厚非，但是对于大多数中国大陆的用户来说，仅需要去判断 IP 的地理位置是否属于中国大陆境内，其他国家的 IP 一律代理。过多的数据量会增加载入时间，降低查询效率；
 
-而最致命的问题就是准备度低，这会导致代理工具查询后得到错误，做出错误的分流判定，最终导致用户体验不佳，如：网站无法访问、访问缓慢等问题。
+而最致命的问题就是准确度低，这会导致代理工具查询后得到错误，做出错误的分流判定，最终导致用户体验不佳，如：网站无法访问、访问缓慢等问题。
 
 ## 🥳 项目介绍
 项目选取更新较为频繁、广受好评、准确度高的 **ipip.net** 和 **纯真** IP 数据库的中国大陆 IP 地址段信息进行合并、去重、整理操作，最终生成仅含有中国大陆 IP 信息的 GeoIP2 数据库。准确度高、用户使用体验好。
@@ -38,21 +38,74 @@ GeoIP2 数据库的大小仅为 111 KB，对比原来庞大的 4 MB 数据库，
 对于网络状况不好，存在污染的环境下，建议选择 CDN 加速的方式下载，速度非常快。但是可能存在缓存未更新的情况，很可能下载到旧的资源。
 
 ### 🙋🏻‍♂️ 使用方式
+
+⚠️ 注意：任何代理工具在使用本项目提供的数据库前，请务必确保以下 3 点（请根据工具语法调整规则）：
+* 禁用与 中国大陆 IP 地址段 直连策略 相关的规则或规则集
+    ``` bash
+    RULE-SET, https://handsome.hackl0us.com/China-IP.list, DIRECT # 务必禁用或删除
+    GEOIP, CN, DIRECT # 与上一条类似的规则与本条规则不可共存
+    ```
+
+* 规则中使用 `GEOIP, CN, DIRECT` 来调用数据库查询，且该条规则建议紧随最终规则之上，避免多余的 DNS 查询，降低效率。
+    ``` bash
+    ... 省略诸多规则 ...
+    GEOIP, CN, DIRECT # 建议在这里使用规则
+    FINAL, PROXY # 最终规则
+    ```
+
+* 规则中不可以存在其他国家或地区的 `GEOIP` 规则，因为数据库中仅包含中国大陆地区的 IP 地址段记录
+    ``` bash
+    GEOIP, US, PROXY # 错误，无法查询到相关记录
+    GEOIP, AU, PROXY # 错误，无法查询到相关记录
+    GEOIP, HK, PROXY # 错误，无法查询到相关记录
+    GEOIP, CN, DIRECT # 正确
+    ```
+
 #### Surge 
-Surge 用户请确保你的软件版本满足以下要求：
 
-* Surge for macOS: `4.0.2 (1215)` 或更高
-* Surge for iOS / iPadOS: `4.10.0 (1851)` 或更高
+**Surge for macOS**
 
-macOS 💻 配置方式：Setting - General - GeoIP Database 处粘贴上方复制的 `Country.mmdb` 下载链接，点击 Update Now 即可。
+⚠️ 软件版本要求 `4.0.2 (1215) [Beta]` 或更高
 
-iOS / iPadOS 📱 配置方式： Home 页面拉至最下 - More Settings - 
-GeoIP Database - CUSTOM GEOIP DATABASE URL 处粘贴上方复制的 `Country.mmdb` 下载链接，点击 Update Now 即可。
+打开软件 Dashboard > Setting > General > 在 GeoIP Database 处粘贴上方复制的 `Country.mmdb` 下载链接，点击 Update Now 即可。
 
-#### Clash
-Clash 及其衍生工具（如 Clash X, Clash for Windows, Clash for Android, OpenClash 等）的用户直接通过上面链接下载 `Country.mmdb` 并替换掉 Clash 配置文件夹下的同名文件即可。
+**Surge for iOS / iPadOS** 
 
-#### ShadowRocket 和 Quantmult X
+⚠️ 软件版本要求 `4.10.0 (1851) [TestFlight]` 或更高
+
+打开 App > Home 页面拉至最下 > More Settings > GeoIP Database > 在 CUSTOM GEOIP DATABASE URL 处粘贴上方复制的 `Country.mmdb` 下载链接，点击 Update Now 即可。
+
+#### Clash 及其衍生工具
+
+**ClashX 和 ClashX Pro**
+
+工具开发者 [@yicheng](https://github.com/yichengchen/clashX) 表示后续会考虑支持自定义 GeoIP 库，目前需要使用手动替换的方式来使用项目中提供的数据库。
+
+配置方式：点击状态栏的 ClashX 图标，选择「配置」> 「选择打开本地配置文件夹」，用本项目提供的 `Country.mmdb` 数据库替换弹出窗口中的同名文件 > 重新启动工具
+
+⚠️ 请勿使用 「配置」> 「实验性功能」> 「更新 IP 数据库」这一功能，否则 IP 数据库会被还原回 MaxMind 的数据库。
+
+**Clash for Windows**
+
+工具开发者 [Fndroid](https://github.com/Fndroid/clash_for_windows_pkg) 暂未在工具提供内提供可以自定义 GeoIP 数据库的方式，目前需要使用手动替换的方式来使用项目中提供的数据库。
+
+配置方式：打开软件控制面板 > General 选项卡 > 点击 Home Directory 区域下方的 「Open Directory」 > 用本项目提供的 `Country.mmdb` 数据库替换弹出窗口中的同名文件 > 重新启动工具
+
+**OpenClash for OpenWRT**
+
+工具开发者 [@vernesong](https://github.com/vernesong/OpenClash) 已经积极跟进，在 `v0.40.17` 版本中已经添加了自定义 GEOIP 和自定义大陆 IP 段的功能，并将本项目提供的数据库作为选项提供，非常友好。
+
+配置方式：打开 OpenClash 配置页面 > 全局设置 > GEOIP 数据库订阅 >  下拉菜单中选择本项目 > 保存并应用。另外可以根据个人偏好，设定数据库更新时间间隔（本项目每 3 天更新一次）。
+
+**Clash for Android**
+
+工具开发者 [@Kr328](https://github.com/Kr328/ClashForAndroid) 明确表示不会支持自定义 GeoIP 数据库功能，态度非常坚决。给出的原因是「没有有效的校验手段」和「应用不针对中国大陆用户设计」，具体原因可以查看:
+
+* [Kr328/ClashForAndroid#749](https://github.com/Kr328/ClashForAndroid/issues/749) 
+* [Kr328/ClashForAndroid#411 (comment)](https://github.com/Kr328/ClashForAndroid/issues/411#issuecomment-640780469)
+
+
+#### ShadowRocket 和 Quantumult X
 直接在 Safari 中打开 `Country.mmdb` 下载链接，Safari 下载完毕后页面下方会提示 “在...中打开”，点击完成导入。
 
 
