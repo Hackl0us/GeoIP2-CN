@@ -52,6 +52,7 @@ jobs:
         CURRENT_DIR=$(pwd)
         cd dist
         ./ipip2mmdb -s ./CN-ip-cidr.txt -d Country.mmdb
+        sed -e '/^$/d' -e 's/^/  - /' ./CN-ip-cidr.txt | sed -e '1s/^/payload:\n/' > CN-ip-cidr.yaml
         cd $CURRENT_DIR
 
     - name: Push artifacts to release branch
@@ -66,10 +67,12 @@ jobs:
         git rm -rf .
 
         cp -rf dist/CN-ip-cidr.txt ./
+        cp -rf dist/CN-ip-cidr.yaml ./
         cp -rf dist/Country.mmdb ./
 
         git add Country.mmdb
         git add CN-ip-cidr.txt
+        git add CN-ip-cidr.yaml
         git commit -am "Updated at $(date)"
 
         git branch -D release
