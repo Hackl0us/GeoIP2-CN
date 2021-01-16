@@ -107,6 +107,7 @@ GeoIP2 数据库的大小仅为 111 KB，对比原来庞大的 4 MB 数据库，
 
 #### ShadowRocket 和 Quantumult X
 直接在 Safari 中打开 `Country.mmdb` 下载链接，Safari 下载完毕后页面下方会提示 “在...中打开”，点击完成导入。
+新版Quantumult X已支持“来源”并可设置自动更新，只需在更多设置里的GeoLite2栏目，点击来源并填入：https://github.com/Hackl0us/GeoIP2-CN/blob/release/Country.mmdb ，然后打开自动更新开关即可。
 
 
 ## 🏅 版权声明
