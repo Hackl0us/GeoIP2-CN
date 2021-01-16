@@ -105,7 +105,13 @@ GeoIP2 数据库的大小仅为 111 KB，对比原来庞大的 4 MB 数据库，
 * [Kr328/ClashForAndroid#411 (comment)](https://github.com/Kr328/ClashForAndroid/issues/411#issuecomment-640780469)
 
 
-#### ShadowRocket 和 Quantumult X
+#### Quantumult X
+
+⚠️ 软件版本要求 `v1.0.18-build475` 或更高
+
+右下角「风车」> 底部「其他设置」> 「GeoLite2」> 「来源」> 粘贴上方复制的 `Country.mmdb` 下载链接，点击 「好」 即可。
+
+#### ShadowRocket
 直接在 Safari 中打开 `Country.mmdb` 下载链接，Safari 下载完毕后页面下方会提示 “在...中打开”，点击完成导入。
 
 
