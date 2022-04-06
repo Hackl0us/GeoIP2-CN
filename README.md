@@ -55,10 +55,11 @@ GeoIP2 数据库的大小仅为 100 KB 左右，对比原来庞大的数据库�
 * [🎡 Quantumult X](https://github.com/Hackl0us/GeoIP2-CN/wiki/Quantumult-X)
 * [🚀 Shadowrocket](https://github.com/Hackl0us/GeoIP2-CN/wiki/Shadowrocket)
 * [🐱 Clash](https://github.com/Hackl0us/GeoIP2-CN/wiki/Clash)
-  * ClashX / ClashX Pro
+  * ClashX / ClashX Pro (macOS)
   * Clash for Windows
-  * OpenClash for OpenWRT
+  * OpenClash (OpenWRT)
   * Clash for Android
+  * Stash (iOS)
 
 ## ⚠️ 注意事项
 1. **禁用或删除** 与 **中国大陆 IP 地址段** 相关的规则或规则集
