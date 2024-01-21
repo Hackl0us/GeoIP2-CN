@@ -56,7 +56,7 @@ jobs:
 
     - name: Push artifacts to release branch
       run: |
-        git config --local user.email "10215166+Hackl0us@users.noreply.github.com"
+        git config --local user.email "18021638+gaoshilei@users.noreply.github.com"
         git config --local user.name "github-action[bot]"
 
         git fetch
