@@ -41,11 +41,11 @@ jobs:
       run: |
         curl -LR -o dist/ipip_net.txt "https://raw.githubusercontent.com/17mon/china_ip_list/master/china_ip_list.txt"
         curl -LR -o dist/chunzhen.txt "https://raw.githubusercontent.com/metowolf/iplist/master/data/country/CN.txt"
+        echo >> dist/chunzhen.txt # ensure newline at ending
 
-    - name: Merge and IP lists and remove duplicates
+    - name: Merge and IP lists and deep deduplication
       run: |
-        awk 'FNR==1{print ""}{print}' dist/*.txt > dist/merge.txt
-        awk '!seen[$0]++' dist/merge.txt > dist/CN-ip-cidr.txt
+        cat dist/*.txt | dist/dedup > dist/CN-ip-cidr.txt
 
     - name: Generate GeoIP2 database
       run: |
