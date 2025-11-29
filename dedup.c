@@ -9,12 +9,12 @@ struct Trie {
 } *root=NULL;
 
 char merge(struct Trie *p) {
+    // missing child
+    if(!p) return 0;
     // this node is marked
     if(p->flag) return 1;
-    // missing either child
-    if(!p->child[0]||!p->child[1]) return 0;
     // true when both true;
-    return (p->flag = merge(p->child[0]) && merge(p->child[1]));
+    return (p->flag = merge(p->child[0]) & merge(p->child[1]));
 }
 
 void print(struct Trie *p, unsigned depth) {
